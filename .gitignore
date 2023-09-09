@@ -5,8 +5,8 @@
 # env
 .env
 
-# postgresql
-/postgresql
+# postgres
+/postgres
 
 # Logs
 logs
