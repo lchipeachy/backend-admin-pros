@@ -1,8 +1,7 @@
 /* eslint-disable prettier/prettier */
+import { User } from "src/users";
+
 export interface LoginResponse { 
-    user_id: string;
-    email: string;
-    first_name: string;
-    last_name: string;
+    user: User;
     token: string;
 }
