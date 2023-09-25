@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Patch } from '@nestjs/common';
+import { Controller, Post, Body, Patch, Get, Request } from '@nestjs/common';
 
 import { AuthService } from '../services/auth.service';
 import { ChangePasswordDto, LoginDto, RegisterDto } from '../dto';
@@ -7,7 +7,7 @@ import { GetUser, User } from 'src/users';
 import { MyResponse } from 'src/core';
 
 import { Auth } from '../decorators';
-import { LoginResponse } from '../interfaces/login-response.interface';
+import { CheckTokenResponse, LoginResponse } from '../interfaces';
 
 @Controller('auth')
 export class AuthController {
@@ -21,6 +21,13 @@ export class AuthController {
   @Post('login')
   login(@Body() loginDto: LoginDto): Promise<MyResponse<LoginResponse>> {
     return this.authService.login(loginDto);
+  }
+
+  @Get('check-token')
+  @Auth()
+  checkToken(@Request() req: Request): MyResponse<CheckTokenResponse> {
+    const user = req['user'] as User;
+    return this.authService.checkToken(user);
   }
 
   @Patch('change-password')
