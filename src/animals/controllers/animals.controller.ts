@@ -9,11 +9,10 @@ import {
   Delete,
 } from '@nestjs/common';
 
-
+import { AnimalsService } from '../services';
 import { CreateAnimalDto, UpdateAnimalDto } from '../dto';
 import { MyResponse } from 'src/core';
 import { Animal } from '../entities';
-import { AnimalsService } from '../animals.module';
 
 @Controller('animals')
 export class AnimalsController {
