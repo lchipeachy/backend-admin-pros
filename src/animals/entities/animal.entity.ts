@@ -3,9 +3,12 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+
+import { Species } from './species.entity';
 
 @Entity('animal')
 export class Animal {
@@ -37,6 +40,9 @@ export class Animal {
     default: true,
   })
   is_alive: boolean;
+
+  @ManyToOne(() => Species, (species) => species.animals)
+  species: Species;
 
   @CreateDateColumn({
     type: 'timestamptz',
