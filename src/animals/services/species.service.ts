@@ -1,5 +1,9 @@
 /* eslint-disable prettier/prettier */
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
@@ -46,6 +50,25 @@ export class SpeciesService {
       console.log(error);
       this.handleDBErrors(error);
     }
+  }
+
+  async getSpecies(species_id: string): Promise<MyResponse<Species>> {
+    const species = await this.speciesRepository.findOne({
+      where: { species_id },
+      relations: ['animals'],
+    });
+
+    if (!species)
+      throw new NotFoundException(`La especie #${species_id} no existe`);
+
+    const response: MyResponse<Species> = {
+      statusCode: 200,
+      status: 'OK',
+      message: `La especie #${species_id} fue encontrada exitosamente`,
+      reply: species,
+    };
+
+    return response;
   }
 
   private handleDBErrors(error: any): never {

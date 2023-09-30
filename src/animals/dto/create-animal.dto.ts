@@ -5,6 +5,7 @@ import {
   IsInt,
   IsNotEmpty,
   IsString,
+  IsUUID,
   Min,
 } from 'class-validator';
 
@@ -26,6 +27,9 @@ export class CreateAnimalDto {
 
   @IsDateString()
   arrival: Date;
+
+  @IsUUID()
+  species_id: string;
 
   @IsString()
   @IsIn(['healthy', 'sick', 'injured'])
