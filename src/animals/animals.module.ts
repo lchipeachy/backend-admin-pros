@@ -2,13 +2,18 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
-import { AnimalsService, SpeciesService } from './services';
-import { AnimalsController, SpeciesController } from './controllers';
-import { Animal, Species } from './entities';
+import { AnimalsService, SpeciesService, BiomeService } from './services';
+import {
+  AnimalsController,
+  BiomeController,
+  SpeciesController,
+
+} from './controllers';
+import { Animal, Biome, Species } from './entities';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Animal, Species])],
-  controllers: [AnimalsController, SpeciesController],
-  providers: [AnimalsService, SpeciesService],
+  imports: [TypeOrmModule.forFeature([Animal, Species, Biome])],
+  controllers: [AnimalsController, SpeciesController, BiomeController],
+  providers: [AnimalsService, SpeciesService, BiomeService],
 })
 export class AnimalsModule {}
