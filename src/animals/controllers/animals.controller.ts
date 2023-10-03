@@ -7,6 +7,7 @@ import {
   Patch,
   Param,
   Delete,
+  ParseUUIDPipe,
 } from '@nestjs/common';
 
 import { AnimalsService } from '../services';
@@ -30,9 +31,11 @@ export class AnimalsController {
     return this.animalsService.findAll();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.animalsService.findOne(+id);
+  @Get(':animal_id')
+  findOne(
+    @Param('animal_id', ParseUUIDPipe) animal_id: string,
+  ): Promise<MyResponse<Animal>> {
+    return this.animalsService.findOne(animal_id);
   }
 
   @Patch(':id')
