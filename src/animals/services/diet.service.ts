@@ -5,8 +5,10 @@ import { Repository } from 'typeorm';
 import { Diet } from '../entities';
 import { CreateDietDto } from '../dto';
 import { MyResponse, handleDBErrors } from 'src/core';
+import { Auth } from 'src/auth/decorators';
 
 @Injectable()
+@Auth()
 export class DietService {
   constructor(
     @InjectRepository(Diet)

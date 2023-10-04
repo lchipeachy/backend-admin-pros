@@ -11,8 +11,10 @@ import { UpdateAnimalDto } from '../dto/update-animal.dto';
 import { Animal, Diet, Species } from '../entities';
 import { Repository } from 'typeorm';
 import { MyResponse } from 'src/core';
+import { Auth } from 'src/auth/decorators';
 
 @Injectable()
+@Auth()
 export class AnimalsService {
   constructor(
     @InjectRepository(Animal)

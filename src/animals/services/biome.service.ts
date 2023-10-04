@@ -5,8 +5,10 @@ import { Biome } from '../entities';
 import { Repository } from 'typeorm';
 import { CreateBiomeDto } from '../dto';
 import { MyResponse } from 'src/core';
+import { Auth } from 'src/auth/decorators';
 
 @Injectable()
+@Auth()
 export class BiomeService {
   constructor(
     @InjectRepository(Biome)

@@ -10,8 +10,10 @@ import { Repository } from 'typeorm';
 import { Biome, Species } from '../entities';
 import { CreateSpeciesDto } from '../dto';
 import { MyResponse } from 'src/core';
+import { Auth } from 'src/auth/decorators';
 
 @Injectable()
+@Auth()
 export class SpeciesService {
   constructor(
     @InjectRepository(Species)
