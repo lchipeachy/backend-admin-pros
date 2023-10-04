@@ -2,17 +2,32 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
-import { AnimalsService, SpeciesService, BiomeService } from './services';
+import {
+  AnimalsService,
+  SpeciesService,
+  BiomeService,
+  DietService,
+} from './services';
 import {
   AnimalsController,
-  BiomeController,
   SpeciesController,
+  BiomeController,
+  DietController,
 } from './controllers';
-import { Animal, Biome, MedicalRecord, Species } from './entities';
+import { Animal, Biome, Diet, MedicalRecord, Species } from './entities';
+import { AuthModule } from 'src/auth';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Animal, Species, Biome, MedicalRecord])],
-  controllers: [AnimalsController, SpeciesController, BiomeController],
-  providers: [AnimalsService, SpeciesService, BiomeService],
+  imports: [
+    TypeOrmModule.forFeature([Animal, Species, Biome, MedicalRecord, Diet]),
+    AuthModule,
+  ],
+  controllers: [
+    AnimalsController,
+    SpeciesController,
+    BiomeController,
+    DietController,
+  ],
+  providers: [AnimalsService, SpeciesService, BiomeService, DietService],
 })
 export class AnimalsModule {}
