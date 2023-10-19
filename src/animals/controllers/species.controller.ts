@@ -12,8 +12,10 @@ import { SpeciesService } from '../services';
 import { CreateSpeciesDto } from '../dto/create-species.dto';
 import { MyResponse } from 'src/core';
 import { Species } from '../entities';
+import { Auth } from 'src/auth';
 
 @Controller('species')
+@Auth()
 export class SpeciesController {
   constructor(private readonly speciesService: SpeciesService) {}
 
@@ -22,6 +24,11 @@ export class SpeciesController {
     @Body() createSpeciesDto: CreateSpeciesDto,
   ): Promise<MyResponse<Species>> {
     return this.speciesService.create(createSpeciesDto);
+  }
+
+  @Get()
+  findAll(): Promise<MyResponse<Species[]>> {
+    return this.speciesService.findAll();
   }
 
   @Get(':species_id')
