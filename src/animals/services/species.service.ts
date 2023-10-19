@@ -10,14 +10,13 @@ import { Repository } from 'typeorm';
 import { Biome, Species } from '../entities';
 import { CreateSpeciesDto } from '../dto';
 import { MyResponse } from 'src/core';
-import { handleDBErrors } from 'src/core';
+import { handleDBErrors } from 'src/core/helpers';
 
 @Injectable()
 export class SpeciesService {
   constructor(
     @InjectRepository(Species)
     private readonly speciesRepository: Repository<Species>,
-
     @InjectRepository(Biome)
     private readonly biomeRepository: Repository<Biome>,
   ) {}
@@ -80,10 +79,6 @@ export class SpeciesService {
 
     return response;
   }
-  catch (error) {
-    console.log(error);
-    handleDBErrors(error);
-  }
 
   async findAll() {
     const species: Species[] = await this.speciesRepository.find({});
@@ -94,5 +89,9 @@ export class SpeciesService {
       reply: species,
     };
     return response;
+  }
+  catch(error) {
+    console.log(error);
+    handleDBErrors(error);
   }
 }
