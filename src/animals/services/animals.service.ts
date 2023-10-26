@@ -1,9 +1,5 @@
 /* eslint-disable prettier/prettier */
-import {
-  BadRequestException,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 
 import { CreateAnimalDto } from '../dto/create-animal.dto';
@@ -11,10 +7,9 @@ import { UpdateAnimalDto } from '../dto/update-animal.dto';
 import { Animal, Diet, Species } from '../entities';
 import { Repository } from 'typeorm';
 import { MyResponse } from 'src/core';
-import { Auth } from 'src/auth/decorators';
+import { handleDBErrors } from 'src/core/helpers';
 
 @Injectable()
-@Auth()
 export class AnimalsService {
   constructor(
     @InjectRepository(Animal)
@@ -70,19 +65,19 @@ export class AnimalsService {
       return response;
     } catch (error) {
       console.log(error);
-      this.handleDBErrors(error);
+      handleDBErrors(error);
     }
   }
 
-  async findAll(): Promise<MyResponse<Animal[]>> {
+  async findAll() {
     const animals: Animal[] = await this.animalRepository.find({
       where: { is_alive: true },
+      relations: ['species', 'species.biome', 'species.diets'],
     });
-
     const response: MyResponse<Animal[]> = {
       statusCode: 200,
       status: 'OK',
-      message: 'Lista de animales',
+      message: 'Lista de Animales',
       reply: animals,
     };
 
@@ -92,12 +87,7 @@ export class AnimalsService {
   async findOne(animal_id: string): Promise<MyResponse<Animal>> {
     const animal = await this.animalRepository.findOne({
       where: { animal_id },
-      relations: [
-        'species',
-        'species.biome',
-        'species.diets',
-        'medical_record',
-      ],
+      relations: ['species', 'species.biome', 'species.diets'],
     });
 
     if (!animal)
@@ -121,10 +111,8 @@ export class AnimalsService {
       animal_id,
       ...updateAnimalDto,
     });
-
     if (!animal)
       throw new NotFoundException(`El animal #${animal_id} no fue encontrado`);
-
     try {
       await this.animalRepository.save(animal);
 
@@ -134,11 +122,10 @@ export class AnimalsService {
         message: `El animal ${animal.name} fue actualizado correctamente`,
         reply: animal,
       };
-
       return response;
     } catch (error) {
       console.log(error);
-      this.handleDBErrors(error);
+      handleDBErrors(error);
     }
   }
 
@@ -164,11 +151,10 @@ export class AnimalsService {
       return response;
     } catch (error) {
       console.log(error);
-      this.handleDBErrors(error);
+      handleDBErrors(error);
     }
   }
-
-  private handleDBErrors(error: any): never {
-    throw new BadRequestException(`Error: ${error.detail}`);
+  catch(error) {
+    handleDBErrors(error);
   }
 }
